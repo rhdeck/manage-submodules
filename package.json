@@ -1,0 +1,29 @@
+{
+  "name": "manage-submodules",
+  "version": "1.0.0",
+  "description": "Functions for managing git submodules with lerna packages",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhdeck/manage-submodules.git"
+  },
+  "author": "Ray Deck",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rhdeck/manage-submodules/issues"
+  },
+  "bin": {
+    "smadd": "bin/add.js",
+    "smrm": "bin/remove.js",
+    "smlist": "bin/list.js",
+    "smupdate": "bin/update.js"
+  },
+  "homepage": "https://github.com/rhdeck/manage-submodules#readme",
+  "dependencies": {
+    "ini": "^1.3.5",
+    "rimraf": "^2.6.2"
+  }
+}
