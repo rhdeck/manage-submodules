@@ -71,8 +71,8 @@ function resolvePath(path) {
   if (path.startsWith(base)) return path;
   return Path.join(base, path);
 }
-function exec(path, command, args, options) {
-  if (!path) return execAll(command, args, options);
+function spawn(path, command, args, options) {
+  if (!path) return spawnAll(command, args, options);
   if (options && typeof options == "object") {
     Object.keys(baseOptions).forEach(key => {
       if (typeof options[key] == "undefined") options[key] = baseOptions[key];
@@ -84,9 +84,36 @@ function exec(path, command, args, options) {
   cp.spawnSync(command, args, options);
   process.chdir(oldcwd);
 }
-function execAll(command, args, options) {
+function spawnAll(command, args, options) {
   Object.keys(list()).forEach(key => {
-    exec(key, command, args, options);
+    spawn(key, command, args, options);
+  });
+}
+function exec(path, command, options) {
+  if (!path) return execAll(command, options);
+  if (options && typeof options == "object") {
+    Object.keys(baseOptions).forEach(key => {
+      if (typeof options[key] == "undefined") options[key] = baseOptions[key];
+    });
+  }
+  const oldcwd = process.cwd();
+  const fullPath = resolvePath(path);
+  process.chdir(fullPath);
+  cp.execSync(command, options);
+  process.chdir(oldcwd);
+}
+function execAll(command, options) {
+  Object.keys(list()).forEach(key => {
+    exec(key, command, options);
+  });
+}
+function walkAll(cb) {
+  const oldcwd = process.cwd();
+  Object.keys(list()).forEach(key => {
+    const fullPath = resolvePath(key);
+    process.chdir(fullPath);
+    cb(key);
+    process.chdir(oldcwd);
   });
 }
 function updateAll() {
@@ -104,9 +131,12 @@ module.exports = {
   add: add,
   remove: remove,
   removeAll: removeAll,
+  spawn: spawn,
+  spawnAll: spawnAll,
   exec: exec,
   execAll: execAll,
   update: update,
   updateAll: updateAll,
-  resolvePath: resolvePath
+  resolvePath: resolvePath,
+  walkAll: walkAll
 };
