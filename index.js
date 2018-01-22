@@ -63,7 +63,7 @@ function remove(path) {
 function update(path) {
   if (!path) return;
   const fullPath = resolvePath(path);
-  cp.spawnSync("git", ["submodule", "update", fullPath], baseOptions);
+  cp.spawnSync("git", ["submodule", "update", "--init", fullPath], baseOptions);
 }
 function resolvePath(path) {
   const base = "submodules";
